@@ -1,4 +1,5 @@
 #include "wifi_connection.h"
+#include "wifi_ap.h"
 #include "driver/gpio.h"
 
 #define PIN_INTERRUPT 15
@@ -24,10 +25,15 @@ void run_ota (void* params)
 
 void app_main (void)
 {
-    wifi_credentials_t wifi = {
+    wifi_credentials_t wifi_sta = {
         .ssid = "hPalmiraCM",
         .pass = "Hpalmira17"
     };
+
+    // wifi_ap_credentials_t wifi_ap = {
+    //     .ssid = "esp32_network",
+    //     .pass = "hpalmira17"
+    // };
 
     //Initialize semaphore
     ota_semaphore = xSemaphoreCreateBinary ();
@@ -58,8 +64,8 @@ void app_main (void)
     ESP_LOGI (TAG, "ESP_WIFI_MODE_STA");
 
     //Initialize WIFI STATION
-    wifi_init_sta (wifi);
-
+    wifi_init_sta (wifi_sta);
+    //wifi_init_softap (wifi_ap);
 }
 
 

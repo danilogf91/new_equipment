@@ -6,6 +6,7 @@ static EventGroupHandle_t s_wifi_event_group;
 static const char* TAG = "wifi station";
 static int s_retry_num = 0;
 TaskHandle_t xHandle = NULL;
+static esp_netif_t* esp_netif;
 
 wifi_sta_config_t wifi_creed = {
     .ssid = "hPalmiraCM",
@@ -62,7 +63,7 @@ void wifi_init_sta (wifi_credentials_t wifi)
     ESP_ERROR_CHECK (esp_netif_init ());
 
     ESP_ERROR_CHECK (esp_event_loop_create_default ());
-    esp_netif_create_default_wifi_sta ();
+    //esp_netif_create_default_wifi_sta ();
 
     wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT ();
     ESP_ERROR_CHECK (esp_wifi_init (&cfg));
@@ -71,6 +72,17 @@ void wifi_init_sta (wifi_credentials_t wifi)
     esp_event_handler_instance_t instance_got_ip;
     ESP_ERROR_CHECK (esp_event_handler_instance_register (WIFI_EVENT, ESP_EVENT_ANY_ID, &event_handler, NULL, &instance_any_id));
     ESP_ERROR_CHECK (esp_event_handler_instance_register (IP_EVENT, IP_EVENT_STA_GOT_IP, &event_handler, NULL, &instance_got_ip));
+
+
+    esp_netif = esp_netif_create_default_wifi_sta ();
+
+    // for static ip...
+    esp_netif_dhcpc_stop (esp_netif);
+    esp_netif_ip_info_t ip_info;
+    ip_info.ip.addr = ESP_IP4TOADDR (192, 168, 1, 105);
+    ip_info.gw.addr = ESP_IP4TOADDR (192, 168, 1, 100);
+    ip_info.netmask.addr = ESP_IP4TOADDR (255, 255, 255, 0);
+    esp_netif_set_ip_info (esp_netif, &ip_info);
 
     wifi_config_t wifi_config = {
         .sta = {

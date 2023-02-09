@@ -1,4 +1,3 @@
-// void test (void);
 #include "stdio.h"
 #include "string.h"
 #include "freertos/FreeRTOS.h"
@@ -51,7 +50,6 @@ typedef struct wifi_credentials
     unsigned char ssid[32];
     unsigned char pass[64];
 }wifi_credentials_t;
-
 
 void wifi_init_sta (wifi_credentials_t wifi);
 void event_handler (void* arg, esp_event_base_t event_base, int32_t event_id, void* event_data);
