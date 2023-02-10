@@ -91,9 +91,31 @@ esp_err_t on_led_set (httpd_req_t* req)
     return ESP_OK;
 }
 
+esp_err_t on_led_status (httpd_req_t* req)
+{
+    char* string = NULL;
+    cJSON* led_json = NULL;
+    cJSON* data = cJSON_CreateObject ();
+
+    ESP_LOGI (TAG, "url %s was hit", req->uri);
+
+    led_json = cJSON_CreateNumber (gpio_get_level (WIFI_SERVER_LED));
+    cJSON_AddItemToObject (data, "led", led_json);
+    string = cJSON_Print (data);
+    ESP_LOGW (TAG, "%s", string);
+
+    httpd_resp_set_type (req, "application/json");
+    httpd_resp_send (req, string, strlen (string));
+
+    cJSON_Delete (data);
+    return ESP_OK;
+}
+
+
 void RegisterEndPoints (void)
 {
-    gpio_set_direction (WIFI_SERVER_LED, GPIO_MODE_OUTPUT);
+    gpio_set_direction (WIFI_SERVER_LED, GPIO_MODE_INPUT_OUTPUT);
+
     httpd_handle_t server = NULL;
     httpd_config_t config = HTTPD_DEFAULT_CONFIG ();
 
@@ -120,6 +142,12 @@ void RegisterEndPoints (void)
         .method = HTTP_POST,
         .handler = on_led_set };
     httpd_register_uri_handler (server, &led_end_point_config);
+
+    httpd_uri_t led_status_end_point_config = {
+    .uri = "/api/led-status",
+    .method = HTTP_GET,
+    .handler = on_led_status };
+    httpd_register_uri_handler (server, &led_status_end_point_config);
 
 
 }

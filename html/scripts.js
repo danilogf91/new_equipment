@@ -1,12 +1,13 @@
 async function getTemperature() {
   const result = await fetch("/api/temperature");
   const temperature = await result.json();
-  console.log(temperature);
+  // console.log(temperature);
   const temp = document.getElementById("temperature-val");
   temp.innerText = temperature.Temperature;
 
   const humidity = document.getElementById("humidity-val");
   humidity.innerText = temperature.Humidity;
+  await ledStatus();
 }
 setInterval(getTemperature, 1000);
 
@@ -15,7 +16,15 @@ async function toggleLed() {
   const el = document.getElementById("led-button");
   isLedOn = !isLedOn;
   fetch("api/led", { method: "POST", body: JSON.stringify({ isLedOn }) });
-  if (isLedOn) {
+}
+
+async function ledStatus() {
+  const el = document.getElementById("led-button");
+  const result = await fetch("/api/led-status");
+  const ledStatus = await result.json();
+  // console.log(ledStatus.led);
+
+  if (ledStatus.led == 1) {
     el.classList.add("led-on");
     el.classList.remove("led-off");
   } else {
