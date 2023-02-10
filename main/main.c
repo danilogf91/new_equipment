@@ -1,9 +1,16 @@
 #include "wifi_connection.h"
 #include "wifi_ap.h"
 #include "server.h"
+#include "dht.h"
 #include "driver/gpio.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 
 #define PIN_INTERRUPT 15
+#define DHT11_PIN 17
+int16_t temperature;
+int16_t humidity;
+
 static const char* TAG = "main program";
 SemaphoreHandle_t ota_semaphore = NULL;
 
@@ -21,6 +28,26 @@ void run_ota (void* params)
         ESP_LOGI (TAG, "Disconnect network");
         wifi_disconnect ();
 
+    }
+}
+
+void temp_read (void* args)
+{
+    while ( true )
+    {
+        if ( dht_read_data (DHT_TYPE_DHT11, ( gpio_num_t ) DHT11_PIN, &humidity, &temperature) == ESP_OK )
+        {
+            // printf ("Humidity: %d %% Temperature: %d Cº\n", humidity / 10, temperature / 10);
+            ESP_LOGI (TAG, "Humidity: %d %% Temperature: %d Cº", humidity / 10, temperature / 10);
+        }
+        else
+        {
+            // printf ("Could not read data from sensor\n");
+            ESP_LOGE (TAG, "Could not read data from sensor");
+            humidity = -1;
+            temperature = -1;
+        }
+        vTaskDelay (2000 / portTICK_PERIOD_MS);
     }
 }
 
@@ -71,7 +98,7 @@ void app_main (void)
         RegisterEndPoints ();
     }
 
-
+    xTaskCreate (temp_read, "temp_read", 1024 * 2, NULL, 2, NULL);
 }
 
 

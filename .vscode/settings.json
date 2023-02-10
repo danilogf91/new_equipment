@@ -18,6 +18,11 @@
     "stdio.h": "c",
     "system_error": "c",
     "gpio.h": "c",
-    "cjson.h": "c"
+    "cjson.h": "c",
+    "freertos.h": "c",
+    "random": "c",
+    "array": "c",
+    "string": "c",
+    "string_view": "c"
   }
 }
