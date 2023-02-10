@@ -1,5 +1,6 @@
 #include "wifi_connection.h"
 #include "wifi_ap.h"
+#include "server.h"
 #include "driver/gpio.h"
 
 #define PIN_INTERRUPT 15
@@ -64,8 +65,13 @@ void app_main (void)
     ESP_LOGI (TAG, "ESP_WIFI_MODE_STA");
 
     //Initialize WIFI STATION
-    wifi_init_sta (wifi_sta);
-    //wifi_init_softap (wifi_ap);
+    if ( ESP_OK == wifi_init_sta (wifi_sta) )
+        // if ( ESP_OK == wifi_init_softap (wifi_ap) )
+    {
+        RegisterEndPoints ();
+    }
+
+
 }
 
 

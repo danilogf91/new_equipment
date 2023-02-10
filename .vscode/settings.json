@@ -14,6 +14,10 @@
   "files.associations": {
     "wifi_connection.h": "c",
     "complex": "c",
-    "netfwd": "cpp"
+    "netfwd": "cpp",
+    "stdio.h": "c",
+    "system_error": "c",
+    "gpio.h": "c",
+    "cjson.h": "c"
   }
 }

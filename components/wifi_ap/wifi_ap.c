@@ -41,7 +41,7 @@ void wifi_event_handler (void* arg, esp_event_base_t event_base, int32_t event_i
 
 }
 
-void wifi_init_softap (wifi_ap_credentials_t wifi)
+esp_err_t wifi_init_softap (wifi_ap_credentials_t wifi)
 {
     ESP_ERROR_CHECK (esp_netif_init ());
     ESP_ERROR_CHECK (esp_event_loop_create_default ());
@@ -78,4 +78,5 @@ void wifi_init_softap (wifi_ap_credentials_t wifi)
 
     ESP_LOGI (TAG, "wifi_init_softap finished. SSID:%s password:%s channel:%d ssid_len:%d",
         wifi_config.ap.ssid, wifi_config.ap.password, wifi_config.ap.channel, wifi_config.ap.ssid_len);
+    return ESP_OK;
 }

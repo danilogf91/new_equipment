@@ -1,7 +1,6 @@
 #include <string.h>
 #include "wifi_connection.h"
 
-
 static EventGroupHandle_t s_wifi_event_group;
 static const char* TAG = "wifi station";
 static int s_retry_num = 0;
@@ -56,7 +55,7 @@ void event_handler (void* arg, esp_event_base_t event_base, int32_t event_id, vo
     }
 }
 
-void wifi_init_sta (wifi_credentials_t wifi)
+esp_err_t wifi_init_sta (wifi_credentials_t wifi)
 {
     s_wifi_event_group = xEventGroupCreate ();
 
@@ -115,15 +114,19 @@ void wifi_init_sta (wifi_credentials_t wifi)
     if ( bits & WIFI_CONNECTED_BIT )
     {
         ESP_LOGI (TAG, "connected to ap SSID:%s password:%s", EXAMPLE_ESP_WIFI_SSID, EXAMPLE_ESP_WIFI_PASS);
+        return ESP_OK;
     }
     else if ( bits & WIFI_FAIL_BIT )
     {
         ESP_LOGI (TAG, "Failed to connect to SSID:%s, password:%s", EXAMPLE_ESP_WIFI_SSID, EXAMPLE_ESP_WIFI_PASS);
+        return ESP_FAIL;
     }
     else
     {
         ESP_LOGE (TAG, "UNEXPECTED EVENT");
+        return ESP_FAIL;
     }
+    return ESP_FAIL;
 }
 
 void wifi_connect (void)
