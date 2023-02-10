@@ -9,6 +9,7 @@ async function getTemperature() {
   humidity.innerText = temperature.Humidity;
   await ledStatus();
 }
+
 setInterval(getTemperature, 1000);
 
 let isLedOn = false;
