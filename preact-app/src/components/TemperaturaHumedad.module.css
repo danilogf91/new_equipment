@@ -1,0 +1,10 @@
+.temperaturaHumedad {
+  padding: 10px 0;
+  text-align: center;
+  /* border: solid 1px black; */
+  border-radius: 10px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  box-shadow: 2px 2px 2px 2px rgba(7, 7, 7, 0.2);
+}

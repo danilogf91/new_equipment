@@ -1,0 +1,15 @@
+.led {
+  width: 40px;
+  height: 40px;
+  border: 2px solid black;
+  /* margin: auto; */
+  border-radius: 20px;
+}
+
+.ledOn {
+  background-color: green;
+}
+
+.ledOff {
+  background-color: #555;
+}

@@ -1,0 +1,22 @@
+.btn {
+  /* margin: 5px; */
+  border-radius: 8px;
+  background-color: brown;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  width: 10rem;
+  font-size: 1em;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  border: solid 2px transparent;
+}
+
+.btn:hover {
+  opacity: 0.7;
+  border: solid 2px black;
+}
+
+.btn:active {
+  translate: 0 2px;
+}
